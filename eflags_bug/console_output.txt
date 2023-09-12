@@ -1,0 +1,38 @@
+WARNING  | 2023-09-12 16:11:04,894 | angr.storage.memory_mixins.default_filler_mixin | The program is accessing register with an unspecified value. This could indicate unwanted behavior.
+WARNING  | 2023-09-12 16:11:04,894 | angr.storage.memory_mixins.default_filler_mixin | angr will cope with this by generating an unconstrained symbolic variable and continuing. You can resolve this by:
+WARNING  | 2023-09-12 16:11:04,894 | angr.storage.memory_mixins.default_filler_mixin | 1) setting a value to the initial state
+WARNING  | 2023-09-12 16:11:04,894 | angr.storage.memory_mixins.default_filler_mixin | 2) adding the state option ZERO_FILL_UNCONSTRAINED_{MEMORY,REGISTERS}, to make unknown regions hold null
+WARNING  | 2023-09-12 16:11:04,894 | angr.storage.memory_mixins.default_filler_mixin | 3) adding the state option SYMBOL_FILL_UNCONSTRAINED_{MEMORY,REGISTERS}, to suppress these messages.
+WARNING  | 2023-09-12 16:11:04,894 | angr.storage.memory_mixins.default_filler_mixin | Filling register ftop with 8 unconstrained bytes referenced from 0x0 (not part of a loaded object)
+WARNING  | 2023-09-12 16:11:04,895 | angr.analyses.cfg.cfg_base | "auto_load_libs" is enabled. With libraries loaded in project, CFG will cover libraries, which may take significantly more time than expected. You may reload the binary with "auto_load_libs" disabled, or specify "regions" to limit the scope of CFG recovery.
+Traceback (most recent call last):
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/eflags_bug/eflags_bug_report.py", line 23, in <module>
+    print("eflags", st.regs.eflags)
+                    ^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/state_plugins/view.py", line 41, in __getattr__
+    return state.registers.load(k, inspect=inspect, disable_actions=disable_actions, events=events)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/storage/memory_mixins/unwrapper_mixin.py", line 15, in load
+    return super().load(
+           ^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/storage/memory_mixins/name_resolution_mixin.py", line 64, in load
+    named_addr, named_size = self._resolve_location_name(addr, is_write=False)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/storage/memory_mixins/name_resolution_mixin.py", line 30, in _resolve_location_name
+    self.store("cc_dep1", _get_flags(self.state))  # constraints cannot be added by this
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/engines/vex/claripy/ccall.py", line 2046, in _get_flags
+    return func(state, cc_op, cc_dep1, cc_dep2, cc_ndep)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/engines/vex/claripy/ccall.py", line 1159, in amd64g_calculate_rflags_all
+    return pc_calculate_rdata_all(state, cc_op, cc_dep1, cc_dep2, cc_ndep, platform="AMD64")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/engines/vex/claripy/ccall.py", line 668, in pc_calculate_rdata_all
+    rdata_all = pc_calculate_rdata_all_WRK(state, cc_op, cc_dep1, cc_dep2, cc_ndep, platform=platform)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/engines/vex/claripy/ccall.py", line 565, in pc_calculate_rdata_all_WRK
+    cc_op = op_concretize(cc_op)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/caleb/Documents/vibesproject/angr_bug_reports/venv/lib/python3.11/site-packages/angr/engines/vex/claripy/ccall.py", line 56, in op_concretize
+    raise SimError(
+angr.errors.SimError: Hit a symbolic conditional operation (need If or BVV, got Concat). Something has gone wildly wrong.
